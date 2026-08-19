@@ -12,7 +12,7 @@
  */
 
 #include <iostream>
-
+#include "cell_voltage_reader.hpp"
 /**
  * @brief   Main function of the application.
  * @return  Exit status code.
@@ -20,5 +20,19 @@
 int main()
 {
     std::cout << "INFO : BMS training started" << std::endl;
+
+    CellVoltageReader reader(2);
+
+    reader.read_cell_voltage();
+
+    CellVoltageData data = reader.get_measurement();
+
+    std::cout << "Cell voltage: "
+            << data.voltage
+            << " mV\n"
+            << "Measure validity : "
+            << data.validity
+            << "\n";
+
     return 0;
 }
