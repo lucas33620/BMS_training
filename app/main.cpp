@@ -21,17 +21,17 @@ int main()
 {
     std::cout << "INFO : BMS training started" << std::endl;
 
-    CellVoltageReader reader(2);
+    bms::CellVoltageReader reader(2);
 
     reader.read_cell_voltage();
 
-    CellVoltageData data = reader.get_measurement();
+    bms::CellVoltageData data = reader.get_measurement();
 
     std::cout << "Cell voltage: "
             << data.voltage
             << " mV\n"
             << "Measure validity : "
-            << data.validity
+            << (data.validity == bms::CellMeasurementValidity::VALID ? "VALID" : "INVALID")
             << "\n";
 
     return 0;
