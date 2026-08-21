@@ -9,6 +9,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_executable(BMS_training 
     app/main.cpp
     src/cell_voltage_reader.cpp
+    src/battery_monitor.cpp
 )
 
 target_include_directories(BMS_training PRIVATE
