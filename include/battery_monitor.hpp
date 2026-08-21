@@ -15,9 +15,12 @@ namespace bms
     class BatteryMonitor
     {
     public:
-        CellVoltageStatus check_cell_voltage(const CellVoltageData& data);
+        BatteryMonitor(CellVoltageReader& reader);
+        CellVoltageStatus check_cell_voltage() const;
+        CellVoltageStatus check_cell_voltage(const CellVoltageData& data) const;
 
     private:
+    CellVoltageReader& reader; // Reference to the original CellVoltageReader instance
 
     };
 } // namespace bms
