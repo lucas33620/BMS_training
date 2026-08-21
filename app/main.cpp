@@ -30,6 +30,7 @@ int main()
 
     auto status = monitor.check_cell_voltage();
 
+    /* Debug section */
     std::cout << "Cell voltage: "
             << "Voltage status: "
             << (status == bms::CellVoltageStatus::NORMAL ? "NORMAL\n" : (status == bms::CellVoltageStatus::UNDERVOLTAGE ? "UNDERVOLTAGE\n" : (status == bms::CellVoltageStatus::OVERVOLTAGE ? "OVERVOLTAGE\n" : "INVALID\n")))

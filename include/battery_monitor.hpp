@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cell_voltage_reader.hpp"
+#include "i_cell_monitor.hpp"
 
 namespace bms 
 {
@@ -15,12 +15,12 @@ namespace bms
     class BatteryMonitor
     {
     public:
-        BatteryMonitor(CellVoltageReader& reader);
+        BatteryMonitor(ICellMonitor& reader);
         CellVoltageStatus check_cell_voltage() const;
         CellVoltageStatus check_cell_voltage(const CellVoltageData& data) const;
 
     private:
-    CellVoltageReader& reader; // Reference to the original CellVoltageReader instance
+        ICellMonitor& reader; // Reference to the original CellVoltageReader instance
 
     };
 } // namespace bms

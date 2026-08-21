@@ -1,6 +1,6 @@
 #include "battery_monitor.hpp"
 
-bms::BatteryMonitor::BatteryMonitor(CellVoltageReader& reader)
+bms::BatteryMonitor::BatteryMonitor(ICellMonitor& reader)
     :reader(reader)
 {
 }
@@ -8,8 +8,8 @@ bms::BatteryMonitor::BatteryMonitor(CellVoltageReader& reader)
 bms::CellVoltageStatus bms::BatteryMonitor::check_cell_voltage() const
 {
     CellVoltageData data = reader.get_measurement();
-    return check_cell_voltage(data);
-    
+
+    return check_cell_voltage(data);    
 }
 
 bms::CellVoltageStatus bms::BatteryMonitor::check_cell_voltage(const CellVoltageData& data) const
