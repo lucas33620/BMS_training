@@ -24,19 +24,13 @@ int main()
     std::cout << "INFO : BMS training started" << std::endl;
 
     bms::CellVoltageReader reader(2);
+    bms::BatteryMonitor monitor(reader);
 
     reader.read_cell_voltage();
 
-    bms::CellVoltageData data = reader.get_measurement();
-
-    bms::BatteryMonitor monitor;
-    bms::CellVoltageStatus status = monitor.check_cell_voltage(data);
+    auto status = monitor.check_cell_voltage();
 
     std::cout << "Cell voltage: "
-            << data.voltage
-            << " mV\n"
-            << "Measure validity : "
-            << (data.validity == bms::CellMeasurementValidity::VALID ? "VALID\n" : "INVALID\n")
             << "Voltage status: "
             << (status == bms::CellVoltageStatus::NORMAL ? "NORMAL\n" : (status == bms::CellVoltageStatus::UNDERVOLTAGE ? "UNDERVOLTAGE\n" : (status == bms::CellVoltageStatus::OVERVOLTAGE ? "OVERVOLTAGE\n" : "INVALID\n")))
             << std::endl;
