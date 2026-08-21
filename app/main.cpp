@@ -14,6 +14,7 @@
 #include <iostream>
 #include "cell_voltage_reader.hpp"
 #include "battery_monitor.hpp"
+#include "afe_session.hpp"
 
 /**
  * @brief   Main function of the application.
@@ -30,10 +31,22 @@ int main()
 
     auto status = monitor.check_cell_voltage();
 
-    /* Debug section */
-    std::cout << "Cell voltage: "
-            << "Voltage status: "
-            << (status == bms::CellVoltageStatus::NORMAL ? "NORMAL\n" : (status == bms::CellVoltageStatus::UNDERVOLTAGE ? "UNDERVOLTAGE\n" : (status == bms::CellVoltageStatus::OVERVOLTAGE ? "OVERVOLTAGE\n" : "INVALID\n")))
-            << std::endl;
+    std::cout << "Before scope\n";
+
+    { // Scope
+
+        bms::AfeSession session;
+        std::cout << "Inside scope\n";
+
+        /* Debug section */
+        std::cout << "Cell voltage: "
+                << "Voltage status: "
+                << (status == bms::CellVoltageStatus::NORMAL ? "NORMAL\n" : (status == bms::CellVoltageStatus::UNDERVOLTAGE ? "UNDERVOLTAGE\n" : (status == bms::CellVoltageStatus::OVERVOLTAGE ? "OVERVOLTAGE\n" : "INVALID\n")))
+                << std::endl;
+
+    } // Destructor of AfeSession at the end of the scope
+
+    std::cout << "After scope\n";
+
     return 0;
 }
