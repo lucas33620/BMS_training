@@ -10,7 +10,7 @@ bms::CellVoltageReader::CellVoltageReader(uint8_t cell_number)
 // Methods
 void bms::CellVoltageReader::read_cell_voltage()
 {
-    measurement.voltage = 3650;
+    measurement.voltage = 2650;
     measurement.validity = bms::CellMeasurementValidity::VALID;
 
     // Simulation

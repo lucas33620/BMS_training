@@ -13,6 +13,8 @@
 
 #include <iostream>
 #include "cell_voltage_reader.hpp"
+#include "battery_monitor.hpp"
+
 /**
  * @brief   Main function of the application.
  * @return  Exit status code.
@@ -27,12 +29,16 @@ int main()
 
     bms::CellVoltageData data = reader.get_measurement();
 
+    bms::BatteryMonitor monitor;
+    bms::CellVoltageStatus status = monitor.check_cell_voltage(data);
+
     std::cout << "Cell voltage: "
             << data.voltage
             << " mV\n"
             << "Measure validity : "
-            << (data.validity == bms::CellMeasurementValidity::VALID ? "VALID" : "INVALID")
-            << "\n";
-
+            << (data.validity == bms::CellMeasurementValidity::VALID ? "VALID\n" : "INVALID\n")
+            << "Voltage status: "
+            << (status == bms::CellVoltageStatus::NORMAL ? "NORMAL\n" : (status == bms::CellVoltageStatus::UNDERVOLTAGE ? "UNDERVOLTAGE\n" : (status == bms::CellVoltageStatus::OVERVOLTAGE ? "OVERVOLTAGE\n" : "INVALID\n")))
+            << std::endl;
     return 0;
 }
