@@ -11,6 +11,7 @@ add_executable(BMS_training
     src/cell_voltage_reader.cpp
     src/battery_monitor.cpp
     src/afe_session.cpp
+    src/battery_pack.cpp
 )
 
 target_include_directories(BMS_training PRIVATE
