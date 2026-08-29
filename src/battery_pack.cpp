@@ -16,14 +16,14 @@ namespace bms
         return cells;
     }
 
-    BatteryPackResult BatteryPack::set_cell(std::size_t index, const CellVoltageData& data)
+    bool BatteryPack::set_cell(std::size_t index, const CellVoltageData& data)
     {
         if (index < CELL_COUNT)
         {
             cells[index] = data;
-            return BatteryPackResult::OK;
+            return true;
         }
-        return BatteryPackResult::INVALID_INDEX;
+        return false;
     }
 
 } // Allow to avoid using the namespace bms:: prefix every time when using the BatteryPack class.

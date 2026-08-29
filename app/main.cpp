@@ -25,6 +25,14 @@ int main()
 {
     std::cout << "INFO : BMS training started" << std::endl;
 
+    const std::array<bms::CellVoltageData, 4> test_cells =
+    {{
+        {3650, bms::CellMeasurementValidity::VALID},
+        {0, bms::CellMeasurementValidity::VALID},
+        {3900, bms::CellMeasurementValidity::VALID},
+        {4100, bms::CellMeasurementValidity::VALID}
+    }};
+
     bms::CellVoltageReader reader(2);
     bms::BatteryMonitor monitor(reader);
     bms::BatteryPack battery_pack;
@@ -32,42 +40,65 @@ int main()
     {
         bms::AfeSession session;
 
-        // Simulate acquisition of cell 2
-        reader.read_cell_voltage();
+        bool pack_initialized = true;
 
-        // Get acquired measurement
-        const auto measurement = reader.get_measurement();
-
-        // Store cell 2 measurement in BatteryPack
-        constexpr std::size_t CELL_2_INDEX = 1;
-        const auto result = battery_pack.set_cell(CELL_2_INDEX, measurement);
-
-        if (result == bms::BatteryPackResult::OK)
+        for (std::size_t i = 0; i < test_cells.size(); ++i)
         {
-            const auto& cells = battery_pack.get_cells();
-            const auto& cell_data = cells[CELL_2_INDEX];
+            const auto result = battery_pack.set_cell(i, test_cells[i]);
 
-            // Analyze only cell 2
-            const auto status = monitor.check_cell_voltage(cell_data);
+            if (result != true)
+            {
+                pack_initialized = false;
 
-            std::cout
-                << "Cell 2: Voltage = "
-                << cell_data.voltage
-                << " mV, Validity = "
-                << (cell_data.validity == bms::CellMeasurementValidity::VALID
-                        ? "VALID"
-                        : "INVALID")
-                << ", Status = "
-                << (status == bms::CellVoltageStatus::NORMAL
-                        ? "NORMAL"
-                        : status == bms::CellVoltageStatus::UNDERVOLTAGE
-                            ? "UNDERVOLTAGE"
-                            : status == bms::CellVoltageStatus::OVERVOLTAGE
-                                ? "OVERVOLTAGE"
-                                : "INVALID")
-                << '\n';
+                std::cerr
+                    << "ERROR : Failed to set cell "
+                    << i + 1
+                    << " data."
+                    << std::endl;
+            }
         }
-    }
+
+        if (pack_initialized)
+        {
+
+            // Simulate acquisition of cell 2
+            reader.read_cell_voltage();
+
+            // Get acquired measurement
+            const auto measurement = reader.get_measurement();
+
+            // Store cell 2 measurement in BatteryPack
+            constexpr std::size_t CELL_2_INDEX = 1;
+            const bool result = battery_pack.set_cell(CELL_2_INDEX, measurement);
+
+            if (result == true)
+            {
+                const auto pack_status =
+                monitor.check_battery_pack(battery_pack);
+
+                std::cout
+                    << "Pack status: "
+                    << (pack_status.status == bms::CellVoltageStatus::NORMAL
+                            ? "NORMAL"
+                            : pack_status.status == bms::CellVoltageStatus::UNDERVOLTAGE
+                                ? "UNDERVOLTAGE"
+                                : pack_status.status == bms::CellVoltageStatus::OVERVOLTAGE
+                                    ? "OVERVOLTAGE"
+                                    : "INVALID")
+                    << '\n';
+
+                std::cout
+                    << "Min voltage: "
+                    << pack_status.voltage_min
+                    << " mV\n";
+
+                std::cout
+                    << "Max voltage: "
+                    << pack_status.voltage_max
+                    << " mV\n";
+            }
+        }
+    }   
 
     return 0;
 }
