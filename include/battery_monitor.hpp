@@ -3,6 +3,8 @@
 #include "i_cell_monitor.hpp"
 #include "battery_pack.hpp"
 #include "cell_voltage_types.hpp"
+#include "numeric_utils.hpp"
+#include "battery_monitor_cfg.hpp"
 
 namespace bms 
 {

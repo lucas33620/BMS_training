@@ -75,12 +75,14 @@ namespace bms
             {
                 if (cells[i].voltage < voltage_min)
                 {
-                    voltage_min = cells[i].voltage;
+                    const auto clamped_voltage = bms::clamp_value(cells[i].voltage, CELL_VOLTAGE_MIN, voltage_min);
+                    voltage_min = clamped_voltage;
                 }
 
                 if (cells[i].voltage > voltage_max)
                 {
-                    voltage_max = cells[i].voltage;
+                    const auto clamped_voltage = bms::clamp_value(cells[i].voltage, voltage_max, CELL_VOLTAGE_MAX);
+                    voltage_max = clamped_voltage;
                 }
             }
         }
