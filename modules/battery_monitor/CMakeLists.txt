@@ -19,3 +19,7 @@ target_link_libraries(battery_monitor PUBLIC
 target_link_libraries(battery_monitor PUBLIC
     battery_pack
 )
+
+target_compile_options(battery_monitor PRIVATE
+    /W4
+)
