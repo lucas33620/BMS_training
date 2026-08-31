@@ -11,6 +11,16 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+add_library(battery_monitor)
+
+target_sources(battery_monitor PRIVATE
+    src/battery_monitor.cpp
+)
+
+target_include_directories(battery_monitor PUBLIC
+    include
+)
+
 add_executable(BMS_training)
 
 target_sources(BMS_training PRIVATE
@@ -20,16 +30,6 @@ target_sources(BMS_training PRIVATE
     src/battery_pack.cpp
 )
 
-target_include_directories(BMS_training PRIVATE
-    include
-)
-
-add_library(battery_monitor)
-
-target_sources(battery_monitor PRIVATE
-    src/battery_monitor.cpp
-)
-
-target_include_directories(battery_monitor PUBLIC
-    include
+target_link_libraries(BMS_training PRIVATE
+    battery_monitor
 )
