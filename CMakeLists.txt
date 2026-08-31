@@ -16,11 +16,20 @@ add_executable(BMS_training)
 target_sources(BMS_training PRIVATE
     app/main.cpp
     src/cell_voltage_reader.cpp
-    src/battery_monitor.cpp
     src/afe_session.cpp
     src/battery_pack.cpp
 )
 
 target_include_directories(BMS_training PRIVATE
+    include
+)
+
+add_library(battery_monitor)
+
+target_sources(battery_monitor PRIVATE
+    src/battery_monitor.cpp
+)
+
+target_include_directories(battery_monitor PUBLIC
     include
 )
