@@ -5,7 +5,7 @@
 
 namespace bms
 {
-    TEST(BatteryMonitorTest, TestCellVoltageReturnsUndervoltage)
+    TEST(BatteryMonitorTest, VoltageBelowLowerThresholdReturnsUndervoltage)
     {
         CellVoltageReader reader;
         BatteryMonitor monitor(reader);
@@ -19,7 +19,7 @@ namespace bms
         EXPECT_EQ(status, CellVoltageStatus::UNDERVOLTAGE);
     }
 
-    TEST(BatteryMonitorTest, ValidCellVoltageReturnsNormal)
+    TEST(BatteryMonitorTest, VoltageAtLowerThresholdReturnsNormal)
     {
         bms::CellVoltageReader reader(2);
         bms::BatteryMonitor monitor(reader);
@@ -31,5 +31,33 @@ namespace bms
         const auto status = monitor.check_cell_voltage(cell);
 
         EXPECT_EQ(bms::CellVoltageStatus::NORMAL, status);
+    }
+
+    TEST(BatteryMonitorTest, VoltageAtUpperThresholdReturnsNormal)
+    {
+        bms::CellVoltageReader reader(2);
+        bms::BatteryMonitor monitor(reader);
+
+        bms::CellVoltageData cell;
+        cell.voltage = 4200;
+        cell.validity = bms::CellMeasurementValidity::VALID;
+
+        const auto status = monitor.check_cell_voltage(cell);
+
+        EXPECT_EQ(bms::CellVoltageStatus::NORMAL, status);
+    }
+
+    TEST(BatteryMonitorTest, VoltageAboveUpperThresholdReturnsOvervoltage)
+    {
+        bms::CellVoltageReader reader(2);
+        bms::BatteryMonitor monitor(reader);
+
+        bms::CellVoltageData cell;
+        cell.voltage = 4201;
+        cell.validity = bms::CellMeasurementValidity::VALID;
+
+        const auto status = monitor.check_cell_voltage(cell);
+
+        EXPECT_EQ(bms::CellVoltageStatus::OVERVOLTAGE, status);
     }
 }
