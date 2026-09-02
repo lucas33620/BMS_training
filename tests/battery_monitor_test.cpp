@@ -7,7 +7,7 @@ namespace bms
 {
     TEST(BatteryMonitorTest, VoltageBelowLowerThresholdReturnsUndervoltage)
     {
-        CellVoltageReader reader;
+        CellVoltageReader reader(2);
         BatteryMonitor monitor(reader);
 
         CellVoltageData cell;
@@ -21,43 +21,43 @@ namespace bms
 
     TEST(BatteryMonitorTest, VoltageAtLowerThresholdReturnsNormal)
     {
-        bms::CellVoltageReader reader(2);
-        bms::BatteryMonitor monitor(reader);
+        CellVoltageReader reader(2);
+        BatteryMonitor monitor(reader);
 
-        bms::CellVoltageData cell;
+        CellVoltageData cell;
         cell.voltage = 3000 ;
-        cell.validity = bms::CellMeasurementValidity::VALID;
+        cell.validity = CellMeasurementValidity::VALID;
 
         const auto status = monitor.check_cell_voltage(cell);
 
-        EXPECT_EQ(bms::CellVoltageStatus::NORMAL, status);
+        EXPECT_EQ(CellVoltageStatus::NORMAL, status);
     }
 
     TEST(BatteryMonitorTest, VoltageAtUpperThresholdReturnsNormal)
     {
-        bms::CellVoltageReader reader(2);
-        bms::BatteryMonitor monitor(reader);
+        CellVoltageReader reader(2);
+        BatteryMonitor monitor(reader);
 
-        bms::CellVoltageData cell;
+        CellVoltageData cell;
         cell.voltage = 4200;
-        cell.validity = bms::CellMeasurementValidity::VALID;
+        cell.validity = CellMeasurementValidity::VALID;
 
         const auto status = monitor.check_cell_voltage(cell);
 
-        EXPECT_EQ(bms::CellVoltageStatus::NORMAL, status);
+        EXPECT_EQ(CellVoltageStatus::NORMAL, status);
     }
 
     TEST(BatteryMonitorTest, VoltageAboveUpperThresholdReturnsOvervoltage)
     {
-        bms::CellVoltageReader reader(2);
-        bms::BatteryMonitor monitor(reader);
+        CellVoltageReader reader(2);
+        BatteryMonitor monitor(reader);
 
-        bms::CellVoltageData cell;
+        CellVoltageData cell;
         cell.voltage = 4201;
-        cell.validity = bms::CellMeasurementValidity::VALID;
+        cell.validity = CellMeasurementValidity::VALID;
 
         const auto status = monitor.check_cell_voltage(cell);
 
-        EXPECT_EQ(bms::CellVoltageStatus::OVERVOLTAGE, status);
+        EXPECT_EQ(CellVoltageStatus::OVERVOLTAGE, status);
     }
 }
